@@ -3,6 +3,7 @@ const { body, validationResult } = require('express-validator');
 const app = express();
 app.use(express.json()); // For parsing application/json
 
+require('dotenv').config();
 
 // --- Sample Data Store ---
 const users = [];
@@ -51,7 +52,8 @@ app.post(
 );
 
 // --- Start Server ---
-const PORT = 3033;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+// const PORT = 3033;
+//process.env.PORT
+app.listen(process.env.PORT, () => {
+  console.log(`Server running on http://localhost:${process.env.PORT}`);
 });
