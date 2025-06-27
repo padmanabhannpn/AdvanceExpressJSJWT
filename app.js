@@ -100,6 +100,37 @@ app.post('/api/register', async (req, res) => {
     }
 });
 
+// Login User
+app.post('/api/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!(email && password)) {
+            return res.status(400).json({ error: 'All input is required' });
+        }
+
+        const user = await userModel.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ error: 'User Not Found' });
+        }
+
+        // Direct password comparison (not recommended for production)
+        if (password === user.password) {
+             const token = jwt.sign(
+            { user_id: user._id, email },
+            process.env.JWT_SECRET,
+            { expiresIn: '2h' }
+        );
+
+            return res.status(200).json({ user,token });
+        }
+        res.status(400).json({ error: 'Invalid Credentials' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 app.listen(process.env.PORT, () => {
   console.log(`Server running on http://localhost:${process.env.PORT}`);
 });
