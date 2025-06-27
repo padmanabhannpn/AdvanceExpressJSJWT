@@ -131,6 +131,14 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+// Protected Route
+app.get('/api/dashboard', authenticateToken, (req, res) => {
+    res.json({ 
+        message: 'Welcome to the protected route!',
+        user: req.user
+    });
+});
+
 app.listen(process.env.PORT, () => {
   console.log(`Server running on http://localhost:${process.env.PORT}`);
 });
